@@ -5,15 +5,19 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     public static InputManager instance;
-    public bool firstTouch;
-    public bool isTouching;
-    public float initialTouch_y, initialTouch_x;
-    public float lastTouch_y, lastTouch_x;
-    public float delta_y, delta_x;
-    public event System.Action TouchStartedEvent;
-    public event System.Action TouchContinueEvent;
-    public event System.Action TouchEndedEvent;
-
+    [SerializeField] private bool firstTouch;
+    [SerializeField] private bool isTouching;
+    [SerializeField] private float initialTouch_y, initialTouch_x;
+    [SerializeField] private float lastTouch_y, lastTouch_x;
+    [SerializeField] private float delta_y, delta_x;
+    [SerializeField] private event System.Action TouchStartedEvent;
+    [SerializeField] private event System.Action TouchContinueEvent;
+    [SerializeField] private event System.Action TouchEndedEvent;
+    private LevelBrain _levelBrain;
+    public void Init(LevelBrain levelBrain)
+    {
+        _levelBrain = levelBrain;
+    }
     private void Awake()
     {
         if (instance == null)
@@ -38,7 +42,6 @@ public class InputManager : MonoBehaviour
             if (!firstTouch)
             {
                 firstTouch = true;
-                GameManager.instance.StartGame();
 
             }
 

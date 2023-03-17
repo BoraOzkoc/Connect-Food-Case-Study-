@@ -10,7 +10,7 @@ public class CanvasManager : MonoBehaviour
     public List<Canvas> canvasList;
     private int level;
     public TextMeshProUGUI levelText;
-
+    private LevelBrain _levelBrain;
     private void Awake()
     {
         if (instance == null)
@@ -24,17 +24,25 @@ public class CanvasManager : MonoBehaviour
             instance = this;
         }
     }
+
     public enum PanelType
     {
-        game, fail, win, menu
+        menu,
+        levels,
+        game,
+        win,
+        fail
+        
     }
-    private void Start()
+
+    public void Init(LevelBrain levelBrain)
     {
+        _levelBrain = levelBrain;
         GameManager.instance.LevelStartedEvent += LevelStartedEvent;
         GameManager.instance.LevelFailedEvent += LevelFailedEvent;
         GameManager.instance.LevelSuccessEvent += LevelSuccessEvent;
         level = PlayerPrefs.GetInt("Level", 1);
-        levelText.text = "Level " + level;
+        //levelText.text = "Level " + level;
 
         ActivateCanvas(PanelType.menu);
     }
@@ -46,7 +54,6 @@ public class CanvasManager : MonoBehaviour
 
     public void ActivateCanvas(PanelType panelId)
     {
-
         int index = (int)panelId;
 
         for (int i = 0; i < canvasList.Count; i++)
@@ -62,23 +69,32 @@ public class CanvasManager : MonoBehaviour
             }
         }
     }
+
+    public void ActivateLevelCanvas()
+    {
+        ActivateCanvas(PanelType.levels);
+    }
+
     private void LevelFailedEvent()
     {
         ActivateCanvas(PanelType.fail);
     }
+
     private void LevelSuccessEvent()
     {
         ActivateCanvas(PanelType.win);
     }
+
     public void ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
     public void LoadNextScene()
     {
         if (level > 2)
         {
-            int levelNumber = Random.Range(0,3);
+            int levelNumber = Random.Range(0, 3);
             SceneManager.LoadScene(levelNumber);
             level++;
         }
@@ -87,6 +103,7 @@ public class CanvasManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             level++;
         }
+
         PlayerPrefs.SetInt("Level", level);
     }
 }

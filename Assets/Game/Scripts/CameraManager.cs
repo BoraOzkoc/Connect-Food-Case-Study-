@@ -8,8 +8,10 @@ public class CameraManager : MonoBehaviour
     public static CameraManager instance;
     public CinemachineVirtualCamera gameCam, menuCam;
     public Camera cam;
-    private void Start()
+    private LevelBrain _levelBrain;
+    public void Init(LevelBrain levelBrain)
     {
+        _levelBrain = levelBrain;
         GameManager.instance.LevelStartedEvent += _LevelStartedEvent;
         ActivateCamera(menuCam);
     }

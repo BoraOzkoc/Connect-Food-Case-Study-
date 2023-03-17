@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public event System.Action LevelFailedEvent;
 
     public bool isLevelActive;
+
+    private LevelBrain _levelBrain;
     private void Awake()
     {
         if (instance == null)
@@ -25,10 +27,11 @@ public class GameManager : MonoBehaviour
 
         }
     }
-    public void StartGame()
+    public void Init(LevelBrain levelBrain)
     {
-        isLevelActive = true;
-        LevelStartedEvent?.Invoke();
+        _levelBrain = levelBrain;
+        // isLevelActive = true;
+        // LevelStartedEvent?.Invoke();
 
     }
     public void EndGame(bool state)
