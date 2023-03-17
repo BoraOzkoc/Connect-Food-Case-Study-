@@ -9,6 +9,8 @@ public class CameraManager : MonoBehaviour
     public CinemachineVirtualCamera gameCam, menuCam;
     public Camera cam;
     private LevelBrain _levelBrain;
+    
+
     public void Init(LevelBrain levelBrain)
     {
         _levelBrain = levelBrain;
@@ -19,8 +21,8 @@ public class CameraManager : MonoBehaviour
     private void _LevelStartedEvent()
     {
         ActivateCamera(gameCam);
-
     }
+
     private void ActivateCamera(CinemachineVirtualCamera virtualCam)
     {
         if (virtualCam == menuCam)
@@ -28,7 +30,7 @@ public class CameraManager : MonoBehaviour
             menuCam.Priority = 50;
             gameCam.Priority = 0;
         }
-        else if(virtualCam == gameCam)
+        else if (virtualCam == gameCam)
         {
             menuCam.Priority = 0;
             gameCam.Priority = 50;

@@ -7,10 +7,12 @@ using TMPro;
 public class CanvasManager : MonoBehaviour
 {
     public static CanvasManager instance;
-    public List<Canvas> canvasList;
+    [SerializeField] private List<Canvas> canvasList;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private LevelButtonManager levelButtonManager;
     private int level;
-    public TextMeshProUGUI levelText;
     private LevelBrain _levelBrain;
+    private GameManager _gameManager;
     private void Awake()
     {
         if (instance == null)
@@ -35,13 +37,16 @@ public class CanvasManager : MonoBehaviour
         
     }
 
-    public void Init(LevelBrain levelBrain)
+    public void Init(LevelBrain levelBrain,GameManager gameManager)
     {
         _levelBrain = levelBrain;
+        _gameManager = gameManager;
+
         GameManager.instance.LevelStartedEvent += LevelStartedEvent;
         GameManager.instance.LevelFailedEvent += LevelFailedEvent;
         GameManager.instance.LevelSuccessEvent += LevelSuccessEvent;
         level = PlayerPrefs.GetInt("Level", 1);
+        levelButtonManager.Init(level);
         //levelText.text = "Level " + level;
 
         ActivateCanvas(PanelType.menu);
@@ -80,6 +85,12 @@ public class CanvasManager : MonoBehaviour
         ActivateCanvas(PanelType.fail);
     }
 
+    public void ActivateGameCanvas()
+    {
+        _gameManager.StartLevel();
+        ActivateCanvas(PanelType.game);
+
+    }
     private void LevelSuccessEvent()
     {
         ActivateCanvas(PanelType.win);

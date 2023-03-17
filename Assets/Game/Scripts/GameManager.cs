@@ -31,7 +31,12 @@ public class GameManager : MonoBehaviour
     {
         _levelBrain = levelBrain;
         // isLevelActive = true;
-        // LevelStartedEvent?.Invoke();
+
+    }
+
+    public void StartLevel()
+    {
+        LevelStartedEvent?.Invoke();
 
     }
     public void EndGame(bool state)

@@ -6,18 +6,16 @@ using UnityEngine;
 
 public class LevelButtonManager : MonoBehaviour
 {
-    [SerializeField] private List<LevelButtonProperties> levelList = new List<LevelButtonProperties>();
+    [SerializeField] private List<LevelButtonProperties> levelButtonList = new List<LevelButtonProperties>();
+    [SerializeField] private List<LevelController> levelList = new List<LevelController>();
 
-    public void OnEnable()
+    public void Init(int savedLevel = 0)
     {
-        Init();
-    }
-
-    public void Init()
-    {
-        for (int i = 0; i < levelList.Count; i++)
+        for (int i = 0; i < levelButtonList.Count; i++)
         {
-            levelList[i].Init(i + 1);
+            bool state = savedLevel > i;
+
+            levelButtonList[i].Init(i + 1, state, levelList[i]);
         }
     }
 }

@@ -14,7 +14,7 @@ public class LevelBrain : MonoBehaviour
     private void Start()
     {
         gameManager.Init(this);
-        canvasManager.Init(this);
+        canvasManager.Init(this, gameManager);
         cameraManager.Init(this);
         inputManager.Init(this);
     }
