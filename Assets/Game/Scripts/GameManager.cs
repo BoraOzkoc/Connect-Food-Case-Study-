@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     public void StartLevel()
     {
         LevelStartedEvent?.Invoke();
-
+        isLevelActive = true;
     }
     public void EndGame(bool state)
     {

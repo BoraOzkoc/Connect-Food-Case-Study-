@@ -10,7 +10,7 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] private List<Canvas> canvasList;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private LevelButtonManager levelButtonManager;
-    private int level;
+    [SerializeField] private int level;
     private LevelBrain _levelBrain;
     private GameManager _gameManager;
     private void Awake()
@@ -45,7 +45,7 @@ public class CanvasManager : MonoBehaviour
         GameManager.instance.LevelStartedEvent += LevelStartedEvent;
         GameManager.instance.LevelFailedEvent += LevelFailedEvent;
         GameManager.instance.LevelSuccessEvent += LevelSuccessEvent;
-        level = PlayerPrefs.GetInt("Level", 1);
+        // level = PlayerPrefs.GetInt("Level", 1);
         levelButtonManager.Init(level);
         //levelText.text = "Level " + level;
 
@@ -85,12 +85,7 @@ public class CanvasManager : MonoBehaviour
         ActivateCanvas(PanelType.fail);
     }
 
-    public void ActivateGameCanvas()
-    {
-        _gameManager.StartLevel();
-        ActivateCanvas(PanelType.game);
-
-    }
+    
     private void LevelSuccessEvent()
     {
         ActivateCanvas(PanelType.win);
