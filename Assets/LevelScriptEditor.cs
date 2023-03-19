@@ -14,7 +14,8 @@ public class LevelScriptEditor : Editor
 
         if (GUILayout.Button("Generate Grids"))
         {
-            if (!myTarget.IsRandom()) myTarget.Init();
+            myTarget.Reset();
+            myTarget.Init();
         }
     }
 }

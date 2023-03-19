@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,18 +12,19 @@ public class GridController : MonoBehaviour
     [SerializeField] private GameObject selectionFrame;
     [SerializeField] private List<GridController> neighborGridList = new List<GridController>();
     [SerializeField] private GameObject mesh;
-    private int _id;
+    [SerializeField] private int _id;
     private bool _isSelected;
 
-    public void Init(int order,bool isRandom)
+    public void Init(int order)
     {
         gameObject.name = "Grid_" + order;
         
         GetDeSelected();
-        
-        if(isRandom) ChangeProperties();
-    }
 
+        ChangeProperties();
+    }
+    
+    
     private void ChangeProperties()
     {
         int randomNum = Random.Range(0, spriteList.Count);

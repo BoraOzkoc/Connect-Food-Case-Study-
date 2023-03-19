@@ -9,8 +9,9 @@ public class GridManager : MonoBehaviour
     [SerializeField] private float padding_x, padding_z;
     private List<GridController> gridList = new List<GridController>();
     private List<List<GridController>> listOfGridList = new List<List<GridController>>();
-
-    public void Init(bool isRandom)
+    private GameObject gridTemplate;
+    
+    public void Init()
     {
         ConfigureLists();
 
@@ -18,12 +19,17 @@ public class GridManager : MonoBehaviour
 
         SetNeighbors();
 
-        ActivateGrids(isRandom);
+        ActivateGrids();
     }
 
-   
+
     private void ConfigureLists()
     {
+        if (gridTemplate)
+        {
+            ClearAllLists();
+            DestroyImmediate(gridTemplate);
+        }
         for (int i = 0; i < count_z; i++)
         {
             List<GridController> gridList = new List<GridController>();
@@ -36,8 +42,8 @@ public class GridManager : MonoBehaviour
         Vector3 startPos = transform.position;
         Vector3 currentPos = startPos;
 
-        GameObject parent = new GameObject("Grid Template");
-
+        gridTemplate = new GameObject("Grid Template");
+        gridTemplate.transform.SetParent(transform);
         for (int i = 0; i < count_z; i++)
         {
             currentPos.x = startPos.x;
@@ -48,7 +54,7 @@ public class GridManager : MonoBehaviour
                 currentPos += (Vector3.right * padding_x);
 
                 GridController tempGrid =
-                    Instantiate(gridController, currentPos, Quaternion.identity, parent.transform);
+                    Instantiate(gridController, currentPos, Quaternion.identity, gridTemplate.transform);
 
                 listOfGridList[i].Add(tempGrid);
             }
@@ -106,14 +112,22 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void ActivateGrids(bool isRandom)
+    private void ClearAllLists()
+    {
+        for (int i = 0; i < listOfGridList.Count; i++)
+        {
+            listOfGridList[0].Clear();
+        }
+        listOfGridList.Clear();
+    }
+    private void ActivateGrids()
     {
         int order = 0;
         for (int i = 0; i < listOfGridList.Count; i++)
         {
             for (int j = 0; j < listOfGridList[i].Count; j++)
             {
-                listOfGridList[i][j].Init(order, isRandom);
+                listOfGridList[i][j].Init(order);
                 order++;
             }
         }

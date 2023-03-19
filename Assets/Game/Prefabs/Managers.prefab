@@ -1438,14 +1438,13 @@ MonoBehaviour:
   - {fileID: 1801824513783875804}
   levelList:
   - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
-  - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
-  - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
-  - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
-  - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
-  - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
-  - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
-  - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
-  moveCountList: 
+  - {fileID: 1265570073360894472, guid: 0d6a6475ad809c648be5f65aaa06844a, type: 3}
+  - {fileID: 1265570073360894472, guid: 72b7a79e143e1ef40a8dacb198d346de, type: 3}
+  - {fileID: 1265570073360894472, guid: bb90303ca13eed344a0a846abc6cf450, type: 3}
+  - {fileID: 1265570073360894472, guid: 8afa60de76f97cc4aba625bf6d47552c, type: 3}
+  - {fileID: 1265570073360894472, guid: ac92aac9770718a498b7684a7db461cb, type: 3}
+  - {fileID: 1265570073360894472, guid: e2546d50b7b3b224ba77af6900988448, type: 3}
+  - {fileID: 1265570073360894472, guid: 5f35f9947f94ea44baa6f7450cbceeb1, type: 3}
   playButton: {fileID: 1063011684}
   playButtonText: {fileID: 988605291}
   moveCountText: {fileID: 829884347383270773}

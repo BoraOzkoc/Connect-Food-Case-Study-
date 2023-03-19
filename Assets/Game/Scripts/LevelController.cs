@@ -6,20 +6,27 @@ public class LevelController : MonoBehaviour
 {
     [SerializeField] private GridManager gridManager;
     [SerializeField] private int moveCount;
-    [SerializeField] private bool isRandomGenerated;
+    [SerializeField] private bool levelAlreadyCreated;
+
     public void Init()
     {
-        gridManager.Init(isRandomGenerated);
+        if(!levelAlreadyCreated)
+        {
+            gridManager.Init();
+            levelAlreadyCreated = true;
+        }
+    }
+    public void Reset()
+    {
+        levelAlreadyCreated = false;
     }
 
     public void CreateManualGrids()
     {
         
     }
-    public bool IsRandom()
-    {
-        return isRandomGenerated;
-    }
+    
+
     public int GetMoveCount()
     {
         return moveCount;
