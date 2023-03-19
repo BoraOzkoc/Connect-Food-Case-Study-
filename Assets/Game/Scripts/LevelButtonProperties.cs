@@ -55,6 +55,15 @@ public class LevelButtonProperties : MonoBehaviour
         selectionFrame.SetActive(true);
     }
 
+    public int GetLevel()
+    {
+        return levelNumber;
+    }
+
+    public int GetMoveCount()
+    {
+        return _levelController.GetMoveCount();
+    }
     public void GetDeselected()
     {
         selectionFrame.SetActive(false);

@@ -658,6 +658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 5970392605491143223}
+  levelButtonManager: {fileID: 1917219549}
 --- !u!1 &5888914604699324765
 GameObject:
   m_ObjectHideFlags: 0
@@ -1444,8 +1445,11 @@ MonoBehaviour:
   - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
   - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
   - {fileID: 1265570073360894472, guid: d3fe2092c52fba74ab0363c2e41bb123, type: 3}
+  moveCountList: 
   playButton: {fileID: 1063011684}
   playButtonText: {fileID: 988605291}
+  moveCountText: {fileID: 829884347383270773}
+  levelText: {fileID: 0}
 --- !u!1 &5970392606003735164
 GameObject:
   m_ObjectHideFlags: 0

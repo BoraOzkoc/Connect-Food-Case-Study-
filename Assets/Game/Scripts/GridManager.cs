@@ -10,17 +10,18 @@ public class GridManager : MonoBehaviour
     private List<GridController> gridList = new List<GridController>();
     private List<List<GridController>> listOfGridList = new List<List<GridController>>();
 
-    public void Init()
+    public void Init(bool isRandom)
     {
         ConfigureLists();
-        
+
         CreateGrids();
 
         SetNeighbors();
 
-        ActivateGrids();
+        ActivateGrids(isRandom);
     }
 
+   
     private void ConfigureLists()
     {
         for (int i = 0; i < count_z; i++)
@@ -105,13 +106,15 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void ActivateGrids()
+    private void ActivateGrids(bool isRandom)
     {
+        int order = 0;
         for (int i = 0; i < listOfGridList.Count; i++)
         {
             for (int j = 0; j < listOfGridList[i].Count; j++)
             {
-                listOfGridList[i][j].Init();
+                listOfGridList[i][j].Init(order, isRandom);
+                order++;
             }
         }
     }

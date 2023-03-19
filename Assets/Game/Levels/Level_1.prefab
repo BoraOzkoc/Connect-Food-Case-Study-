@@ -96,3 +96,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridManager: {fileID: 2964491256648552460}
+  moveCount: 20
+  isRandomGenerated: 0

@@ -12,8 +12,9 @@ public class LevelButtonManager : MonoBehaviour
     [SerializeField] private List<LevelButtonProperties> levelButtonList = new List<LevelButtonProperties>();
     [SerializeField] private List<LevelController> levelList = new List<LevelController>();
     [SerializeField] private Button playButton;
-    [SerializeField] private TextMeshProUGUI playButtonText;
+    [SerializeField] private TextMeshProUGUI playButtonText, moveCountText, levelText;
     private LevelButtonProperties selectedLevelButtonProperties;
+    private int moveCount, currentLevel;
 
     public void Init(int savedLevel = 0)
     {
@@ -25,12 +26,25 @@ public class LevelButtonManager : MonoBehaviour
             levelButtonList[i].Init(i + 1, state, levelList[i], this);
         }
     }
-
+    
     private void DeselectButton()
     {
         playButton.interactable = false;
         TogglePlayButtonText(false);
+    }
 
+    public void DecreaseCount()
+    {
+        if (moveCount > 0)
+        {
+            moveCount--;
+            EditMoveCountText(moveCount);
+
+            if (moveCount <= 0)
+            {
+                Debug.Log("no moves left");
+            }
+        }
     }
 
     private void TogglePlayButtonText(bool state)
@@ -51,13 +65,22 @@ public class LevelButtonManager : MonoBehaviour
 
     public void SetSelectedLevel(LevelButtonProperties tempLevel)
     {
-        if(selectedLevelButtonProperties && selectedLevelButtonProperties != tempLevel)selectedLevelButtonProperties.GetDeselected();
+        if (selectedLevelButtonProperties && selectedLevelButtonProperties != tempLevel)
+            selectedLevelButtonProperties.GetDeselected();
         selectedLevelButtonProperties = tempLevel;
+        currentLevel = selectedLevelButtonProperties.GetLevel();
+        moveCount = selectedLevelButtonProperties.GetMoveCount();
+        EditMoveCountText(moveCount);
         selectedLevelButtonProperties.GetSelected();
         playButton.interactable = true;
         TogglePlayButtonText(true);
     }
 
+    public void EditMoveCountText(int count)
+    {
+        moveCountText.text = count.ToString();
+
+    }
     public void InstantiateSelectedLevel()
     {
         selectedLevelButtonProperties.InstantiateLevel();

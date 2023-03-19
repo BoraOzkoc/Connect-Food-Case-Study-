@@ -229,6 +229,7 @@ MonoBehaviour:
   levelText: {fileID: 6841811805058442164}
   levelButton: {fileID: 186835067025938464}
   selectionFrame: {fileID: 3184736169493092756}
+  moveCount: 10
 --- !u!1 &7905831087814552360
 GameObject:
   m_ObjectHideFlags: 0

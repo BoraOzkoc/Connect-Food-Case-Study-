@@ -189,9 +189,8 @@ GameObject:
   - component: {fileID: 5652858895307314297}
   - component: {fileID: 5652858895307314308}
   - component: {fileID: 5652858895307314311}
-  - component: {fileID: 5652858895307314310}
   m_Layer: 3
-  m_Name: Cube
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -263,19 +262,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5652858895307314310
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5652858895307314296}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5652858895742287293
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,6 +272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5652858895742287290}
   - component: {fileID: -3681378452808225834}
+  - component: {fileID: 1079488760915738117}
   m_Layer: 3
   m_Name: GridController
   m_TagString: Untagged
@@ -331,6 +318,21 @@ MonoBehaviour:
   - {fileID: -576379507, guid: 0e2b9be58a91a0644a2365e8daf12be8, type: 3}
   image: {fileID: 2888316331074784560}
   selectionFrame: {fileID: 1994348686716659009}
+  neighborGridList: []
+  mesh: {fileID: 5652858895307314296}
+--- !u!65 &1079488760915738117
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5652858895742287293}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9, y: 0.5, z: 0.9}
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!1 &6904692502122037757
 GameObject:
   m_ObjectHideFlags: 0
