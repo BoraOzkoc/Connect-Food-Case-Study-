@@ -16,13 +16,15 @@ public class LevelButtonManager : MonoBehaviour
     [SerializeField] private RayCastController rayCastController;
     [SerializeField] private CanvasManager canvasManager;
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private List<TextMeshProUGUI> levelItemCountTextList = new List<TextMeshProUGUI>();
     private LevelButtonProperties selectedLevelButtonProperties;
     private int moveCount, currentLevel;
+    private int[] levelItemCountList = new int[7];
 
     public void Init(int savedLevel = 0)
     {
         DeselectButton();
-        
+
         for (int i = 0; i < levelButtonList.Count; i++)
         {
             bool state = savedLevel > i;
@@ -34,26 +36,33 @@ public class LevelButtonManager : MonoBehaviour
     public void Reset()
     {
         ResetMoveCount();
+        ResetItemCountList();
         // Reactivate Raycast(subscribe to touch events)!
         //rayCastController.SubscribeToTouchEvents();
-        Debug.Log("reset called");
+        
         LevelButtonProperties tempLevel = selectedLevelButtonProperties;
         DeletePreviousLevel();
         selectedLevelButtonProperties = tempLevel;
         tempLevel.InstantiateLevel();
         canvasManager.ActivateCanvas(CanvasManager.PanelType.game);
     }
+
     private void ResetMoveCount()
     {
         moveCount = selectedLevelButtonProperties.GetMoveCount();
         EditMoveCountText(moveCount);
-        
     }
+
+    private void ResetItemCountList()
+    {
+        SetLevelItemCounts();
+    }
+
     public void DeletePreviousLevel()
     {
         Debug.Log("delete method called");
 
-        if(selectedLevelButtonProperties)
+        if (selectedLevelButtonProperties)
         {
             ResetMoveCount();
             Destroy(selectedLevelButtonProperties.GetActiveLevel().gameObject);
@@ -62,6 +71,7 @@ public class LevelButtonManager : MonoBehaviour
 
         rayCastController.SubscribeToTouchEvents();
     }
+
     private void DeselectButton()
     {
         playButton.interactable = false;
@@ -114,16 +124,62 @@ public class LevelButtonManager : MonoBehaviour
         TogglePlayButtonText(true);
     }
 
+    public void CheckLevelGoals(int itemID, int amount)
+    {
+        for (int i = 0; i < levelItemCountList.Length; i++)
+        {
+            if (i == itemID)
+            {
+                levelItemCountList[i] -= amount;
+                if (levelItemCountList[i] <= 0) levelItemCountList[i] = 0;
+            }
+        }
+
+        UpdateCountTexts();
+        
+        CheckGoalCounts();
+    }
+
+    private void CheckGoalCounts()
+    {
+        for (int i = 0; i < levelItemCountList.Length; i++)
+        {
+            if (levelItemCountList[i] > 0) return;
+        }
+        gameManager.EndGame(true);
+
+    }
+
+    private void SetLevelItemCounts()
+    {
+        int[] tempItemCountList = selectedLevelButtonProperties.GetActiveLevel().GetItemCountList();
+        for (int i = 0; i <tempItemCountList.Length ; i++)
+        {
+            levelItemCountList[i] =  tempItemCountList[i];
+        }
+
+        UpdateCountTexts();
+    }
+    private void UpdateCountTexts()
+    {
+        for (int i = 0; i < levelItemCountTextList.Count; i++)
+        {
+            levelItemCountTextList[i].text = levelItemCountList[i].ToString();
+        }
+    }
+
     public void EditMoveCountText(int count)
     {
         moveCountText.text = count.ToString();
-
     }
+
     public void InstantiateSelectedLevel()
     {
+        
         DeselectButton();
         selectedLevelButtonProperties.GetDeselected();
         selectedLevelButtonProperties.InstantiateLevel();
+        SetLevelItemCounts();
         GameManager.instance.StartLevel();
     }
 }

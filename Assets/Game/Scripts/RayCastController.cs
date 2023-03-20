@@ -50,18 +50,20 @@ public class RayCastController : MonoBehaviour
         int listCount = selectedGridList.Count;
         if (listCount > 0 && listCount < 3)
         {
-            for (int i = 0; i < selectedGridList.Count; i++)
+            for (int i = 0; i < listCount; i++)
             {
                 selectedGridList[i].GetDeSelected();
             }
         }
         else if (listCount >= 3)
         {
-            for (int i = 0; i < selectedGridList.Count; i++)
+            levelButtonManager.CheckLevelGoals(selectedGridList[0].GetID(),listCount);
+            for (int i = 0; i < listCount; i++)
             {
                 selectedGridList[i].GetDestroyed();
             }
             levelButtonManager.DecreaseCount();
+            
 
         }
         selectedGridList.Clear();

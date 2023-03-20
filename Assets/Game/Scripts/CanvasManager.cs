@@ -42,14 +42,26 @@ public class CanvasManager : MonoBehaviour
         _levelBrain = levelBrain;
         _gameManager = gameManager;
 
-        GameManager.instance.LevelStartedEvent += LevelStartedEvent;
-        GameManager.instance.LevelFailedEvent += LevelFailedEvent;
-        GameManager.instance.LevelSuccessEvent += LevelSuccessEvent;
-        // level = PlayerPrefs.GetInt("Level", 1);
+        SubscribeEvents();
+        
+        level = PlayerPrefs.GetInt("Level", 1);
         levelButtonManager.Init(level);
         //levelText.text = "Level " + level;
 
         ActivateCanvas(PanelType.menu);
+    }
+
+    public void SubscribeEvents()
+    {
+        GameManager.instance.LevelStartedEvent += LevelStartedEvent;
+        GameManager.instance.LevelFailedEvent += LevelFailedEvent;
+        GameManager.instance.LevelSuccessEvent += LevelSuccessEvent;
+    }
+    public void UnSubscribeEvents()
+    {
+        GameManager.instance.LevelStartedEvent -= LevelStartedEvent;
+        GameManager.instance.LevelFailedEvent -= LevelFailedEvent;
+        GameManager.instance.LevelSuccessEvent -= LevelSuccessEvent;
     }
 
     private void LevelStartedEvent()
@@ -88,6 +100,10 @@ public class CanvasManager : MonoBehaviour
 
     }
 
+    private void WinButton()
+    {
+        
+    }
     public void RetryButton()
     {
         levelButtonManager.Reset();
