@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,23 +14,33 @@ public class GridController : MonoBehaviour
     [SerializeField] private List<GridController> neighborGridList = new List<GridController>();
     [SerializeField] private GameObject mesh;
     [SerializeField] private int _id;
+    [SerializeField] private ParticleSystem spawnEffect;
     private bool _isSelected;
 
     public void Init(int order)
     {
         gameObject.name = "Grid_" + order;
-        
+
         GetDeSelected();
 
         ChangeProperties();
     }
-    
-    
+
+
     private void ChangeProperties()
     {
         int randomNum = Random.Range(0, spriteList.Count);
         _id = randomNum;
         image.sprite = spriteList[_id];
+
+        PlaySpawnEffect();
+    }
+
+    private void PlaySpawnEffect()
+    {
+        spawnEffect.Play();
+
+        transform.DOScale(Vector3.one * 1.3f, 0.15f).SetEase(Ease.InQuint).SetLoops(2, LoopType.Yoyo);
     }
 
     public void AddNeighbor(GridController tempGrid)
@@ -81,14 +92,14 @@ public class GridController : MonoBehaviour
             // make invisible for couple seconds
             mesh.SetActive(false);
             yield return new WaitForSeconds(0.1f);
+            // reset
+            GetDeSelected();
             // change properties
             ChangeProperties();
             // make visible again
             mesh.SetActive(true);
             // play spawn effect
-            
-            // reset
-            GetDeSelected();
+            PlaySpawnEffect();
         }
 
         StartCoroutine(DestroyCoroutine());

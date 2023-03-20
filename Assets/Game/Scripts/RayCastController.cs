@@ -8,14 +8,21 @@ public class RayCastController : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private LevelButtonManager levelButtonManager;
     private List<GridController> selectedGridList = new List<GridController>();
-
+    private InputManager _inputmanager;
     public void Init(InputManager inputManager)
     {
+        _inputmanager = inputManager;
         inputManager.TouchStartedEvent += TouchStartedEvent;
         inputManager.TouchContinueEvent += TouchContinueEvent;
         inputManager.TouchEndedEvent += TouchEndedEvent;
     }
 
+    public void UnsubscribeFromTouchEvents()
+    {
+        _inputmanager.TouchStartedEvent -= TouchStartedEvent;
+        _inputmanager.TouchContinueEvent -= TouchContinueEvent;
+        _inputmanager.TouchEndedEvent -= TouchEndedEvent;
+    }
     private void TouchStartedEvent()
     {
         DrawRay();

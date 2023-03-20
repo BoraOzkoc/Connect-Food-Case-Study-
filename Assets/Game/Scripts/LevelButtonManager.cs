@@ -12,7 +12,8 @@ public class LevelButtonManager : MonoBehaviour
     [SerializeField] private List<LevelButtonProperties> levelButtonList = new List<LevelButtonProperties>();
     [SerializeField] private List<LevelController> levelList = new List<LevelController>();
     [SerializeField] private Button playButton;
-    [SerializeField] private TextMeshProUGUI playButtonText, moveCountText, levelText;
+    [SerializeField] private TextMeshProUGUI playButtonText, moveCountText;
+    [SerializeField] private RayCastController rayCastController;
     private LevelButtonProperties selectedLevelButtonProperties;
     private int moveCount, currentLevel;
 
@@ -43,6 +44,7 @@ public class LevelButtonManager : MonoBehaviour
             if (moveCount <= 0)
             {
                 Debug.Log("no moves left");
+                rayCastController.UnsubscribeFromTouchEvents();
             }
         }
     }
