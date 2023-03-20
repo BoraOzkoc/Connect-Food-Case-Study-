@@ -35,6 +35,7 @@ public class CameraManager : MonoBehaviour
             menuCam.Priority = 0;
             gameCam.Priority = 50;
         }
+        
     }
 
     private void Awake()

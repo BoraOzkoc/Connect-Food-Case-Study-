@@ -10,7 +10,7 @@ public class LevelButtonProperties : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private Button levelButton;
     [SerializeField] private GameObject selectionFrame;
-
+    private LevelController activeLevel;
     private LevelController _levelController;
     private int levelNumber;
     private bool _isUnlocked;
@@ -28,6 +28,10 @@ public class LevelButtonProperties : MonoBehaviour
         GetDeselected();
     }
 
+    public LevelController GetActiveLevel()
+    {
+        return activeLevel;
+    }
     private void SetLevelText()
     {
         levelText.text = levelNumber.ToString();
@@ -72,6 +76,7 @@ public class LevelButtonProperties : MonoBehaviour
     public void InstantiateLevel()
     {
         LevelController tempLevel = Instantiate(_levelController, Vector3.zero, Quaternion.identity);
+        activeLevel = tempLevel;
         tempLevel.Init();
     }
 }

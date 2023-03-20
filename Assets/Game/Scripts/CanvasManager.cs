@@ -78,14 +78,21 @@ public class CanvasManager : MonoBehaviour
     public void ActivateLevelCanvas()
     {
         ActivateCanvas(PanelType.levels);
+        levelButtonManager.DeletePreviousLevel();
+        
     }
 
     private void LevelFailedEvent()
     {
         ActivateCanvas(PanelType.fail);
+
     }
 
-    
+    public void RetryButton()
+    {
+        levelButtonManager.Reset();
+
+    }
     private void LevelSuccessEvent()
     {
         ActivateCanvas(PanelType.win);

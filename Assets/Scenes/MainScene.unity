@@ -453,6 +453,50 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1566662876}
     m_Modifications:
+    - target: {fileID: 548155943, guid: 3c19d326272c1a34bbadecf7c74ff864, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 548155943, guid: 3c19d326272c1a34bbadecf7c74ff864, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 548155943, guid: 3c19d326272c1a34bbadecf7c74ff864, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1437425985, guid: 3c19d326272c1a34bbadecf7c74ff864, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1437425985, guid: 3c19d326272c1a34bbadecf7c74ff864, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1437425985, guid: 3c19d326272c1a34bbadecf7c74ff864, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 50385111546534749, guid: 3c19d326272c1a34bbadecf7c74ff864,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1131376714}
+    - target: {fileID: 50385111546534749, guid: 3c19d326272c1a34bbadecf7c74ff864,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RetryButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 50385111546534749, guid: 3c19d326272c1a34bbadecf7c74ff864,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CanvasManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 50385111546534749, guid: 3c19d326272c1a34bbadecf7c74ff864,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1429688427172931716, guid: 3c19d326272c1a34bbadecf7c74ff864,
         type: 3}
       propertyPath: m_AnchorMax.y

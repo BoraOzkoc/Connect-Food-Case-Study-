@@ -12,13 +12,20 @@ public class RayCastController : MonoBehaviour
     public void Init(InputManager inputManager)
     {
         _inputmanager = inputManager;
-        inputManager.TouchStartedEvent += TouchStartedEvent;
-        inputManager.TouchContinueEvent += TouchContinueEvent;
-        inputManager.TouchEndedEvent += TouchEndedEvent;
+        //SubscribeToTouchEvents();
     }
 
+    public void SubscribeToTouchEvents()
+    {
+        Debug.Log("subscribed");
+
+        _inputmanager.TouchStartedEvent += TouchStartedEvent;
+        _inputmanager.TouchContinueEvent += TouchContinueEvent;
+        _inputmanager.TouchEndedEvent += TouchEndedEvent;
+    }
     public void UnsubscribeFromTouchEvents()
     {
+        Debug.Log("unsubscribed");
         _inputmanager.TouchStartedEvent -= TouchStartedEvent;
         _inputmanager.TouchContinueEvent -= TouchContinueEvent;
         _inputmanager.TouchEndedEvent -= TouchEndedEvent;

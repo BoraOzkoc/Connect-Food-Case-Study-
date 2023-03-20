@@ -14,12 +14,15 @@ public class LevelButtonManager : MonoBehaviour
     [SerializeField] private Button playButton;
     [SerializeField] private TextMeshProUGUI playButtonText, moveCountText;
     [SerializeField] private RayCastController rayCastController;
+    [SerializeField] private CanvasManager canvasManager;
+    [SerializeField] private GameManager gameManager;
     private LevelButtonProperties selectedLevelButtonProperties;
     private int moveCount, currentLevel;
 
     public void Init(int savedLevel = 0)
     {
         DeselectButton();
+        
         for (int i = 0; i < levelButtonList.Count; i++)
         {
             bool state = savedLevel > i;
@@ -27,7 +30,38 @@ public class LevelButtonManager : MonoBehaviour
             levelButtonList[i].Init(i + 1, state, levelList[i], this);
         }
     }
-    
+
+    public void Reset()
+    {
+        ResetMoveCount();
+        // Reactivate Raycast(subscribe to touch events)!
+        //rayCastController.SubscribeToTouchEvents();
+        Debug.Log("reset called");
+        LevelButtonProperties tempLevel = selectedLevelButtonProperties;
+        DeletePreviousLevel();
+        selectedLevelButtonProperties = tempLevel;
+        tempLevel.InstantiateLevel();
+        canvasManager.ActivateCanvas(CanvasManager.PanelType.game);
+    }
+    private void ResetMoveCount()
+    {
+        moveCount = selectedLevelButtonProperties.GetMoveCount();
+        EditMoveCountText(moveCount);
+        
+    }
+    public void DeletePreviousLevel()
+    {
+        Debug.Log("delete method called");
+
+        if(selectedLevelButtonProperties)
+        {
+            ResetMoveCount();
+            Destroy(selectedLevelButtonProperties.GetActiveLevel().gameObject);
+            Debug.Log("deleted");
+        }
+
+        rayCastController.SubscribeToTouchEvents();
+    }
     private void DeselectButton()
     {
         playButton.interactable = false;
@@ -45,6 +79,8 @@ public class LevelButtonManager : MonoBehaviour
             {
                 Debug.Log("no moves left");
                 rayCastController.UnsubscribeFromTouchEvents();
+                // lose condition (fail canvas)
+                gameManager.EndGame(false);
             }
         }
     }
@@ -85,6 +121,8 @@ public class LevelButtonManager : MonoBehaviour
     }
     public void InstantiateSelectedLevel()
     {
+        DeselectButton();
+        selectedLevelButtonProperties.GetDeselected();
         selectedLevelButtonProperties.InstantiateLevel();
         GameManager.instance.StartLevel();
     }
