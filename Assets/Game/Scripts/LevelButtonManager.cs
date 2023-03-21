@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class LevelButtonManager : MonoBehaviour
 {
@@ -90,19 +91,26 @@ public class LevelButtonManager : MonoBehaviour
 
     public void DecreaseCount()
     {
-        if (moveCount > 0)
+        IEnumerator WaitForFail()
         {
-            moveCount--;
-            EditMoveCountText(moveCount);
-
-            if (moveCount <= 0)
+            if (moveCount > 0)
             {
-                Debug.Log("no moves left");
-                rayCastController.UnsubscribeFromTouchEvents();
-                // lose condition (fail canvas)
-                gameManager.EndGame(false);
+                moveCount--;
+                EditMoveCountText(moveCount);
+
+                if (moveCount <= 0)
+                {
+                    Debug.Log("no moves left");
+                    rayCastController.UnsubscribeFromTouchEvents();
+                    // lose condition (fail canvas)
+                    yield return new WaitForSeconds(0.2f);
+
+                    gameManager.EndGame(false);
+                }
             }
         }
+
+        StartCoroutine(WaitForFail());
     }
 
     private void TogglePlayButtonText(bool state)
@@ -174,13 +182,20 @@ public class LevelButtonManager : MonoBehaviour
 
     private void CheckGoalCounts()
     {
-        for (int i = 0; i < levelItemCountList.Length; i++)
+        IEnumerator WaitForWin()
         {
-            if (levelItemCountList[i] > 0) return;
+            for (int i = 0; i < levelItemCountList.Length; i++)
+            {
+                if (levelItemCountList[i] > 0) StopCoroutine(WaitForWin());
+            }
+
+            rayCastController.UnsubscribeFromTouchEvents();
+            yield return new WaitForSeconds(0.2f);
+            gameManager.EndGame(true);
         }
 
-        rayCastController.UnsubscribeFromTouchEvents();
-        gameManager.EndGame(true);
+        StartCoroutine(WaitForWin());
+        
     }
 
     private void SetLevelItemCounts()
@@ -227,10 +242,22 @@ public class LevelButtonManager : MonoBehaviour
 
     public void InstantiateSelectedLevel()
     {
-        DeselectButton();
-        selectedLevelButtonProperties.GetDeselected();
-        selectedLevelButtonProperties.InstantiateLevel();
-        SetLevelItemCounts();
-        GameManager.instance.StartLevel();
+        IEnumerator StartLoadingScreen()
+        {
+            canvasManager.ActivateLoadingScreen();
+            
+            yield return new WaitForSeconds(Random.Range(1f,3f));
+            
+            Debug.Log("wait finished");
+            DeselectButton();
+            selectedLevelButtonProperties.GetDeselected();
+            selectedLevelButtonProperties.InstantiateLevel();
+            SetLevelItemCounts();
+            GameManager.instance.StartLevel();
+        }
+
+        StartCoroutine(StartLoadingScreen());
+        
+        
     }
 }

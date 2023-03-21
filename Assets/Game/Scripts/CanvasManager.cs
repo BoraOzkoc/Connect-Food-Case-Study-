@@ -34,7 +34,8 @@ public class CanvasManager : MonoBehaviour
         levels,
         game,
         win,
-        fail
+        fail,
+        loading
     }
 
     public void Init(LevelBrain levelBrain, GameManager gameManager)
@@ -100,6 +101,10 @@ public class CanvasManager : MonoBehaviour
         levelButtonManager.DeletePreviousLevel();
     }
 
+    public void ActivateLoadingScreen()
+    {
+        ActivateCanvas(PanelType.loading);
+    }
     private void LevelFailedEvent()
     {
         ActivateCanvas(PanelType.fail);
