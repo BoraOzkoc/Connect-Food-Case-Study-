@@ -774,8 +774,9 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    Android: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
-    Standalone: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+    Android: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;OBI_ONI_SUPPORTED
+    Standalone: MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;OBI_ONI_SUPPORTED
+    iPhone: OBI_ONI_SUPPORTED
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

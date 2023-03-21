@@ -7,11 +7,14 @@ public class RayCastController : MonoBehaviour
 {
     [SerializeField] private Camera cam;
     [SerializeField] private LevelButtonManager levelButtonManager;
+    [SerializeField] private RopePool ropePool;
     private List<GridController> selectedGridList = new List<GridController>();
-    private InputManager _inputmanager;
+    private List<RopeController> activeRopeList = new List<RopeController>();
+    private InputManager _inputManager;
+    private RopeController _activeRope;
     public void Init(InputManager inputManager)
     {
-        _inputmanager = inputManager;
+        _inputManager = inputManager;
         //SubscribeToTouchEvents();
     }
 
@@ -19,16 +22,16 @@ public class RayCastController : MonoBehaviour
     {
         //Debug.Log("subscribed");
 
-        _inputmanager.TouchStartedEvent += TouchStartedEvent;
-        _inputmanager.TouchContinueEvent += TouchContinueEvent;
-        _inputmanager.TouchEndedEvent += TouchEndedEvent;
+        _inputManager.TouchStartedEvent += TouchStartedEvent;
+        _inputManager.TouchContinueEvent += TouchContinueEvent;
+        _inputManager.TouchEndedEvent += TouchEndedEvent;
     }
     public void UnsubscribeFromTouchEvents()
     {
         //Debug.Log("unsubscribed");
-        _inputmanager.TouchStartedEvent -= TouchStartedEvent;
-        _inputmanager.TouchContinueEvent -= TouchContinueEvent;
-        _inputmanager.TouchEndedEvent -= TouchEndedEvent;
+        _inputManager.TouchStartedEvent -= TouchStartedEvent;
+        _inputManager.TouchContinueEvent -= TouchContinueEvent;
+        _inputManager.TouchEndedEvent -= TouchEndedEvent;
     }
     private void TouchStartedEvent()
     {
@@ -43,6 +46,7 @@ public class RayCastController : MonoBehaviour
     private void TouchEndedEvent()
     {
         StopRay();
+        ClearActiveRopeList();
     }
 
     private void StopRay()
@@ -72,13 +76,13 @@ public class RayCastController : MonoBehaviour
     private void DrawRay()
     {
         Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 50f;
+        mousePos.z = 25;
         mousePos = cam.ScreenToWorldPoint(mousePos);
         Debug.DrawRay(cam.transform.position, mousePos - cam.transform.position, Color.blue);
 
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100))
+        if (Physics.Raycast(ray, out hit, 25))
         {
             //Debug.Log(hit.transform.name);
             if (hit.transform.TryGetComponent(out GridController gridController))
@@ -86,19 +90,49 @@ public class RayCastController : MonoBehaviour
                 if (selectedGridList.Count == 0)
                 {
                     selectedGridList.Add(gridController.GetSelected());
+                    Vector3 gridPos = selectedGridList[^1].transform.position;
+                    RopeController tempRope = ropePool.GetRopeFromPool();
+                    tempRope.AttachStartPoint(gridPos);
+                    _activeRope = tempRope;
+                    activeRopeList.Add(_activeRope);
                 }
                 else
                 {
                     if (!gridController.IsSelected() && selectedGridList[^1].IsNeighbor(gridController) && selectedGridList[^1].IsSameType(gridController))
                     {
                         selectedGridList.Add(gridController.GetSelected());
+                        
+                        Vector3 gridPos = selectedGridList[^1].transform.position;
+                        _activeRope.AttachEndPoint(gridPos);
+                        
+                        RopeController tempRope = ropePool.GetRopeFromPool();
+                        tempRope.AttachStartPoint(gridPos);
+                        _activeRope = tempRope;
+                        activeRopeList.Add(_activeRope);
+
                     }
                     else
                     {
                         //Debug.Log("is not neighbor OR is selected");
                     }
                 }
+                
             }
         }
+
+        if (_activeRope)
+        {
+            _activeRope.MoveEndPoint(ray.GetPoint(20));
+        }
+    }
+
+    private void ClearActiveRopeList()
+    {
+        for (int i = 0; i < activeRopeList.Count; i++)
+        {
+            ropePool.PushRopeToPool(activeRopeList[i]);
+            
+        }
+        activeRopeList.Clear();
     }
 }
