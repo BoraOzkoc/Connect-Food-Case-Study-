@@ -13,6 +13,7 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] private int level;
     private LevelBrain _levelBrain;
     private GameManager _gameManager;
+
     private void Awake()
     {
         if (instance == null)
@@ -34,21 +35,25 @@ public class CanvasManager : MonoBehaviour
         game,
         win,
         fail
-        
     }
 
-    public void Init(LevelBrain levelBrain,GameManager gameManager)
+    public void Init(LevelBrain levelBrain, GameManager gameManager)
     {
         _levelBrain = levelBrain;
         _gameManager = gameManager;
 
         SubscribeEvents();
-        
-        level = PlayerPrefs.GetInt("Level", 1);
-        levelButtonManager.Init(level);
+
+        UpdateLevel();
         //levelText.text = "Level " + level;
 
         ActivateCanvas(PanelType.menu);
+    }
+
+    private void UpdateLevel()
+    {
+        level = PlayerPrefs.GetInt("Level", 1);
+        levelButtonManager.Init(level);
     }
 
     public void SubscribeEvents()
@@ -57,6 +62,7 @@ public class CanvasManager : MonoBehaviour
         GameManager.instance.LevelFailedEvent += LevelFailedEvent;
         GameManager.instance.LevelSuccessEvent += LevelSuccessEvent;
     }
+
     public void UnSubscribeEvents()
     {
         GameManager.instance.LevelStartedEvent -= LevelStartedEvent;
@@ -89,29 +95,38 @@ public class CanvasManager : MonoBehaviour
 
     public void ActivateLevelCanvas()
     {
+        UpdateLevel();
         ActivateCanvas(PanelType.levels);
         levelButtonManager.DeletePreviousLevel();
-        
     }
 
     private void LevelFailedEvent()
     {
         ActivateCanvas(PanelType.fail);
-
     }
 
-    private void WinButton()
+    public void NextButton()
     {
-        
+        levelButtonManager.PrepareNextLevel();
+        //Debug.Log("next button presed");
     }
+
     public void RetryButton()
     {
         levelButtonManager.Reset();
-
     }
+
     private void LevelSuccessEvent()
     {
         ActivateCanvas(PanelType.win);
+        Debug.Log("level=" + level);
+        int maxLevel = PlayerPrefs.GetInt("Level", level);
+        int currentLevel = levelButtonManager.GetCurrentLevel();
+        if (currentLevel == maxLevel) level += 1;
+
+        if (level > maxLevel) PlayerPrefs.SetInt("Level", level);
+
+        Debug.Log("level=" + level);
     }
 
     public void ResetLevel()

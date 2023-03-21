@@ -11,20 +11,24 @@ public class LevelButtonManager : MonoBehaviour
 {
     [SerializeField] private List<LevelButtonProperties> levelButtonList = new List<LevelButtonProperties>();
     [SerializeField] private List<LevelController> levelList = new List<LevelController>();
-    [SerializeField] private Button playButton;
+    [SerializeField] private Button playButton, nextButton;
     [SerializeField] private TextMeshProUGUI playButtonText, moveCountText;
     [SerializeField] private RayCastController rayCastController;
     [SerializeField] private CanvasManager canvasManager;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private List<TextMeshProUGUI> levelItemCountTextList = new List<TextMeshProUGUI>();
+    [SerializeField] private List<Image> itemImageList = new List<Image>();
     private LevelButtonProperties selectedLevelButtonProperties;
-    private int moveCount, currentLevel;
+    private LevelController _currentLevelController;
+    private int moveCount, _currentLevel;
     private int[] levelItemCountList = new int[7];
 
-    public void Init(int savedLevel = 0)
+    public void Init(int savedLevel)
     {
         DeselectButton();
+        //Debug.Log("savedLevel="+savedLevel);
 
+        if (savedLevel == 0) savedLevel = 1;
         for (int i = 0; i < levelButtonList.Count; i++)
         {
             bool state = savedLevel > i;
@@ -38,8 +42,8 @@ public class LevelButtonManager : MonoBehaviour
         ResetMoveCount();
         ResetItemCountList();
         // Reactivate Raycast(subscribe to touch events)!
-        //rayCastController.SubscribeToTouchEvents();
-        
+        // rayCastController.SubscribeToTouchEvents();
+
         LevelButtonProperties tempLevel = selectedLevelButtonProperties;
         DeletePreviousLevel();
         selectedLevelButtonProperties = tempLevel;
@@ -53,6 +57,12 @@ public class LevelButtonManager : MonoBehaviour
         EditMoveCountText(moveCount);
     }
 
+    public int GetCurrentLevel()
+    {
+        return _currentLevel;
+    }
+
+
     private void ResetItemCountList()
     {
         SetLevelItemCounts();
@@ -60,13 +70,13 @@ public class LevelButtonManager : MonoBehaviour
 
     public void DeletePreviousLevel()
     {
-        Debug.Log("delete method called");
+        //Debug.Log("delete method called");
 
         if (selectedLevelButtonProperties)
         {
             ResetMoveCount();
             Destroy(selectedLevelButtonProperties.GetActiveLevel().gameObject);
-            Debug.Log("deleted");
+            //Debug.Log("deleted");
         }
 
         rayCastController.SubscribeToTouchEvents();
@@ -116,12 +126,30 @@ public class LevelButtonManager : MonoBehaviour
         if (selectedLevelButtonProperties && selectedLevelButtonProperties != tempLevel)
             selectedLevelButtonProperties.GetDeselected();
         selectedLevelButtonProperties = tempLevel;
-        currentLevel = selectedLevelButtonProperties.GetLevel();
+        _currentLevel = selectedLevelButtonProperties.GetLevel();
+        
+        if (_currentLevel >= levelButtonList.Count) nextButton.gameObject.SetActive(false);
+        else nextButton.gameObject.SetActive(true);
+        
         moveCount = selectedLevelButtonProperties.GetMoveCount();
         EditMoveCountText(moveCount);
         selectedLevelButtonProperties.GetSelected();
         playButton.interactable = true;
         TogglePlayButtonText(true);
+    }
+
+    public  void PrepareNextLevel()
+    {
+        DeletePreviousLevel();
+        for (int i = 0; i < levelButtonList.Count; i++)
+        {
+            if (levelButtonList[i].GetLevel() == _currentLevel)
+            {
+                SetSelectedLevel(levelButtonList[i + 1]);
+                InstantiateSelectedLevel();
+                return;
+            }
+        }
     }
 
     public void CheckLevelGoals(int itemID, int amount)
@@ -131,12 +159,16 @@ public class LevelButtonManager : MonoBehaviour
             if (i == itemID)
             {
                 levelItemCountList[i] -= amount;
-                if (levelItemCountList[i] <= 0) levelItemCountList[i] = 0;
+                if (levelItemCountList[i] <= 0)
+                {
+                    levelItemCountList[i] = 0;
+                    CloseVisuals(i);
+                }
             }
         }
 
         UpdateCountTexts();
-        
+
         CheckGoalCounts();
     }
 
@@ -146,26 +178,46 @@ public class LevelButtonManager : MonoBehaviour
         {
             if (levelItemCountList[i] > 0) return;
         }
-        gameManager.EndGame(true);
 
+        rayCastController.UnsubscribeFromTouchEvents();
+        gameManager.EndGame(true);
     }
 
     private void SetLevelItemCounts()
     {
+        OpenAllVisuals();
+
         int[] tempItemCountList = selectedLevelButtonProperties.GetActiveLevel().GetItemCountList();
-        for (int i = 0; i <tempItemCountList.Length ; i++)
+        for (int i = 0; i < tempItemCountList.Length; i++)
         {
-            levelItemCountList[i] =  tempItemCountList[i];
+            int amount = tempItemCountList[i];
+            levelItemCountList[i] = amount;
+            if (amount <= 0) CloseVisuals(i);
         }
 
         UpdateCountTexts();
     }
+
     private void UpdateCountTexts()
     {
         for (int i = 0; i < levelItemCountTextList.Count; i++)
         {
             levelItemCountTextList[i].text = levelItemCountList[i].ToString();
         }
+    }
+
+    private void OpenAllVisuals()
+    {
+        for (int i = 0; i < itemImageList.Count; i++)
+        {
+            itemImageList[i].gameObject.SetActive(true);
+        }
+    }
+
+    private void CloseVisuals(int order)
+    {
+        //Debug.Log("close visuals called");
+        itemImageList[order].gameObject.SetActive(false);
     }
 
     public void EditMoveCountText(int count)
@@ -175,7 +227,6 @@ public class LevelButtonManager : MonoBehaviour
 
     public void InstantiateSelectedLevel()
     {
-        
         DeselectButton();
         selectedLevelButtonProperties.GetDeselected();
         selectedLevelButtonProperties.InstantiateLevel();

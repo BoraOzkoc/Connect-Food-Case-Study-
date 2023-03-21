@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
     public void Init(LevelBrain levelBrain)
     {
         _levelBrain = levelBrain;
-        // isLevelActive = true;
 
     }
 

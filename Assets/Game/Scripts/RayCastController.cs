@@ -17,7 +17,7 @@ public class RayCastController : MonoBehaviour
 
     public void SubscribeToTouchEvents()
     {
-        Debug.Log("subscribed");
+        //Debug.Log("subscribed");
 
         _inputmanager.TouchStartedEvent += TouchStartedEvent;
         _inputmanager.TouchContinueEvent += TouchContinueEvent;
@@ -25,7 +25,7 @@ public class RayCastController : MonoBehaviour
     }
     public void UnsubscribeFromTouchEvents()
     {
-        Debug.Log("unsubscribed");
+        //Debug.Log("unsubscribed");
         _inputmanager.TouchStartedEvent -= TouchStartedEvent;
         _inputmanager.TouchContinueEvent -= TouchContinueEvent;
         _inputmanager.TouchEndedEvent -= TouchEndedEvent;
@@ -95,7 +95,7 @@ public class RayCastController : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("is not neighbor OR is selected");
+                        //Debug.Log("is not neighbor OR is selected");
                     }
                 }
             }

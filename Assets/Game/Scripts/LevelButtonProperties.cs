@@ -18,6 +18,7 @@ public class LevelButtonProperties : MonoBehaviour
 
     public void Init(int givenNumber, bool state,LevelController levelController,LevelButtonManager levelButtonManager)
     {
+        //Debug.Log("button=" +gameObject.name +"= state=="+state);
         _levelButtonManager = levelButtonManager;
         _levelController = levelController;
         _isUnlocked = state;
@@ -27,6 +28,7 @@ public class LevelButtonProperties : MonoBehaviour
         SetLockState();
         GetDeselected();
     }
+
 
     public LevelController GetActiveLevel()
     {
@@ -45,6 +47,12 @@ public class LevelButtonProperties : MonoBehaviour
         {
             Color tempColor = levelText.color;
             tempColor.a = 0.5f;
+            levelText.color = tempColor;
+        }
+        else
+        {
+            Color tempColor = levelText.color;
+            tempColor.a = 1f;
             levelText.color = tempColor;
         }
     }
