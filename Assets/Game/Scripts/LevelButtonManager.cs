@@ -19,6 +19,7 @@ public class LevelButtonManager : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private List<TextMeshProUGUI> levelItemCountTextList = new List<TextMeshProUGUI>();
     [SerializeField] private List<Image> itemImageList = new List<Image>();
+    [SerializeField] private ParticleSystem confettiEffect,sadEmojiEffect;
     private LevelButtonProperties selectedLevelButtonProperties;
     private LevelController _currentLevelController;
     private int moveCount, _currentLevel;
@@ -103,7 +104,8 @@ public class LevelButtonManager : MonoBehaviour
                     Debug.Log("no moves left");
                     rayCastController.UnsubscribeFromTouchEvents();
                     // lose condition (fail canvas)
-                    yield return new WaitForSeconds(0.2f);
+                    sadEmojiEffect.Play();
+                    yield return new WaitForSeconds(0.5f);
 
                     gameManager.EndGame(false);
                 }
@@ -184,14 +186,23 @@ public class LevelButtonManager : MonoBehaviour
     {
         IEnumerator WaitForWin()
         {
+            bool canWin = true;
             for (int i = 0; i < levelItemCountList.Length; i++)
             {
-                if (levelItemCountList[i] > 0) StopCoroutine(WaitForWin());
+                if (levelItemCountList[i] > 0)
+                {
+                    canWin = false;
+                    // StopCoroutine(WaitForWin());
+                }
             }
 
-            rayCastController.UnsubscribeFromTouchEvents();
-            yield return new WaitForSeconds(0.2f);
-            gameManager.EndGame(true);
+            if(canWin)
+            {
+                rayCastController.UnsubscribeFromTouchEvents();
+                confettiEffect.Play();
+                yield return new WaitForSeconds(0.5f);
+                gameManager.EndGame(true);
+            }
         }
 
         StartCoroutine(WaitForWin());
@@ -248,7 +259,7 @@ public class LevelButtonManager : MonoBehaviour
             
             yield return new WaitForSeconds(Random.Range(1f,3f));
             
-            Debug.Log("wait finished");
+            //Debug.Log("wait finished");
             DeselectButton();
             selectedLevelButtonProperties.GetDeselected();
             selectedLevelButtonProperties.InstantiateLevel();
