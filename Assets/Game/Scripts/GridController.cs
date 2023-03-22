@@ -52,7 +52,7 @@ public class GridController : MonoBehaviour
     {
         if (_shakeTween == null)
         {
-            Debug.Log("shake called");
+            //Debug.Log("shake called");
             _shakeTween = mesh.transform.DOShakePosition(1, new Vector3(0.1f,0,0.1f), 10, 90, false).SetLoops(-1,LoopType.Yoyo);
         }
     }
@@ -61,7 +61,7 @@ public class GridController : MonoBehaviour
     {
         if (_shakeTween != null)
         {
-            Debug.Log("shake stopped");
+            //Debug.Log("shake stopped");
             _shakeTween.Kill();
             _shakeTween = null;
         }

@@ -126,14 +126,14 @@ public class CanvasManager : MonoBehaviour
     private void LevelSuccessEvent()
     {
         ActivateCanvas(PanelType.win);
-        Debug.Log("level=" + level);
+        //Debug.Log("level=" + level);
         int maxLevel = PlayerPrefs.GetInt("Level", level);
         int currentLevel = levelButtonManager.GetCurrentLevel();
         if (currentLevel == maxLevel) level += 1;
 
         if (level > maxLevel) PlayerPrefs.SetInt("Level", level);
 
-        Debug.Log("level=" + level);
+        //Debug.Log("level=" + level);
     }
 
     public void ResetLevel()

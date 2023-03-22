@@ -108,7 +108,7 @@ public class LevelButtonManager : MonoBehaviour
 
                 if (moveCount <= 0)
                 {
-                    Debug.Log("no moves left");
+                    //Debug.Log("no moves left");
                     rayCastController.UnsubscribeFromTouchEvents();
                     // lose condition (fail canvas)
                     sadEmojiEffect.Play();
