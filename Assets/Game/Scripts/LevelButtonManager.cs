@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class LevelButtonManager : MonoBehaviour
     [SerializeField] private List<LevelButtonProperties> levelButtonList = new List<LevelButtonProperties>();
     [SerializeField] private List<LevelController> levelList = new List<LevelController>();
     [SerializeField] private Button playButton, nextButton;
-    [SerializeField] private TextMeshProUGUI playButtonText, moveCountText;
+    [SerializeField] private TextMeshProUGUI playButtonText, moveCountText, gameNameText;
     [SerializeField] private RayCastController rayCastController;
     [SerializeField] private CanvasManager canvasManager;
     [SerializeField] private GameManager gameManager;
@@ -24,7 +25,13 @@ public class LevelButtonManager : MonoBehaviour
     private LevelController _currentLevelController;
     private int moveCount, _currentLevel;
     private int[] levelItemCountList = new int[7];
+    private Tween _scaleTextTween;
 
+    public void PlayEntryAnimations()
+    {
+        if (_scaleTextTween == null) _scaleTextTween = gameNameText.transform.DOScale(Vector3.one * 1.2f, 1.2f).SetLoops(-1, LoopType.Yoyo);
+
+    }
     public void Init(int savedLevel)
     {
         DeselectButton();
@@ -180,6 +187,7 @@ public class LevelButtonManager : MonoBehaviour
         UpdateCountTexts();
 
         CheckGoalCounts();
+        
     }
 
     private void CheckGoalCounts()
@@ -200,6 +208,7 @@ public class LevelButtonManager : MonoBehaviour
             {
                 rayCastController.UnsubscribeFromTouchEvents();
                 confettiEffect.Play();
+                gameManager.DeActivateLevel();
                 yield return new WaitForSeconds(0.5f);
                 gameManager.EndGame(true);
             }

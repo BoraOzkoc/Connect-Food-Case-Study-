@@ -12,6 +12,7 @@ public class RayCastController : MonoBehaviour
     private List<RopeController> activeRopeList = new List<RopeController>();
     private InputManager _inputManager;
     private RopeController _activeRope;
+
     public void Init(InputManager inputManager)
     {
         _inputManager = inputManager;
@@ -26,6 +27,7 @@ public class RayCastController : MonoBehaviour
         _inputManager.TouchContinueEvent += TouchContinueEvent;
         _inputManager.TouchEndedEvent += TouchEndedEvent;
     }
+
     public void UnsubscribeFromTouchEvents()
     {
         //Debug.Log("unsubscribed");
@@ -33,6 +35,7 @@ public class RayCastController : MonoBehaviour
         _inputManager.TouchContinueEvent -= TouchContinueEvent;
         _inputManager.TouchEndedEvent -= TouchEndedEvent;
     }
+
     private void TouchStartedEvent()
     {
         DrawRay();
@@ -61,18 +64,19 @@ public class RayCastController : MonoBehaviour
         }
         else if (listCount >= 3)
         {
-            levelButtonManager.CheckLevelGoals(selectedGridList[0].GetID(),listCount);
+            levelButtonManager.CheckLevelGoals(selectedGridList[0].GetID(), listCount);
+
             for (int i = 0; i < listCount; i++)
             {
                 selectedGridList[i].GetDestroyed();
             }
-            levelButtonManager.DecreaseCount();
-            
 
+            if (GameManager.instance.IsLevelActive()) levelButtonManager.DecreaseCount();
         }
-        selectedGridList.Clear();
 
+        selectedGridList.Clear();
     }
+
     private void DrawRay()
     {
         Vector3 mousePos = Input.mousePosition;
@@ -98,25 +102,24 @@ public class RayCastController : MonoBehaviour
                 }
                 else
                 {
-                    if (!gridController.IsSelected() && selectedGridList[^1].IsNeighbor(gridController) && selectedGridList[^1].IsSameType(gridController))
+                    if (!gridController.IsSelected() && selectedGridList[^1].IsNeighbor(gridController) &&
+                        selectedGridList[^1].IsSameType(gridController))
                     {
                         selectedGridList.Add(gridController.GetSelected());
-                        
+
                         Vector3 gridPos = selectedGridList[^1].transform.position;
                         _activeRope.AttachEndPoint(gridPos);
-                        
+
                         RopeController tempRope = ropePool.GetRopeFromPool();
                         tempRope.AttachStartPoint(gridPos);
                         _activeRope = tempRope;
                         activeRopeList.Add(_activeRope);
-
                     }
                     else
                     {
                         //Debug.Log("is not neighbor OR is selected");
                     }
                 }
-                
             }
         }
 
@@ -131,8 +134,8 @@ public class RayCastController : MonoBehaviour
         for (int i = 0; i < activeRopeList.Count; i++)
         {
             ropePool.PushRopeToPool(activeRopeList[i]);
-            
         }
+
         activeRopeList.Clear();
     }
 }

@@ -38,6 +38,7 @@ public class CanvasManager : MonoBehaviour
         loading
     }
 
+    
     public void Init(LevelBrain levelBrain, GameManager gameManager)
     {
         _levelBrain = levelBrain;
@@ -49,6 +50,7 @@ public class CanvasManager : MonoBehaviour
         //levelText.text = "Level " + level;
 
         ActivateCanvas(PanelType.menu);
+        levelButtonManager.PlayEntryAnimations();
     }
 
     private void UpdateLevel()

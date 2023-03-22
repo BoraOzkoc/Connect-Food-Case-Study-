@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public event System.Action LevelSuccessEvent;
     public event System.Action LevelFailedEvent;
 
-    public bool isLevelActive;
+    private bool isLevelActive;
 
     private LevelBrain _levelBrain;
     private void Awake()
@@ -33,6 +33,14 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void DeActivateLevel()
+    {
+        isLevelActive = false;
+    }
+    public bool IsLevelActive()
+    {
+        return isLevelActive;
+    }
     public void StartLevel()
     {
         LevelStartedEvent?.Invoke();
@@ -40,14 +48,17 @@ public class GameManager : MonoBehaviour
     }
     public void EndGame(bool state)
     {
+        
+
         if (state)
         {
+            isLevelActive = false;
             LevelSuccessEvent?.Invoke();
 
         }
         else
         {
-            LevelFailedEvent?.Invoke();
+            if(isLevelActive) LevelFailedEvent?.Invoke();
 
         }
     }

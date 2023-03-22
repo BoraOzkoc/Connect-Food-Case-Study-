@@ -16,6 +16,7 @@ public class GridController : MonoBehaviour
     [SerializeField] private int _id;
     [SerializeField] private ParticleSystem spawnEffect;
     private bool _isSelected;
+    private Tween _shakeTween;
 
     public void Init(int order)
     {
@@ -38,9 +39,32 @@ public class GridController : MonoBehaviour
 
     private void PlaySpawnEffect()
     {
+        transform.localScale = Vector3.zero;
+
         spawnEffect.Play();
 
-        transform.DOScale(Vector3.one * 1.3f, 0.15f).SetEase(Ease.InQuint).SetLoops(2, LoopType.Yoyo);
+        transform.DOScale(Vector3.one * 1.5f, 0.15f).SetEase(Ease.InElastic).OnComplete(() =>
+            transform.DOScale(Vector3.one, 0.1f)
+        );
+    }
+
+    private void Shake()
+    {
+        if (_shakeTween == null)
+        {
+            Debug.Log("shake called");
+            _shakeTween = mesh.transform.DOShakePosition(1, new Vector3(0.1f,0,0.1f), 10, 90, false).SetLoops(-1,LoopType.Yoyo);
+        }
+    }
+
+    private void StopShaking()
+    {
+        if (_shakeTween != null)
+        {
+            Debug.Log("shake stopped");
+            _shakeTween.Kill();
+            _shakeTween = null;
+        }
     }
 
     public void AddNeighbor(GridController tempGrid)
@@ -52,6 +76,7 @@ public class GridController : MonoBehaviour
     {
         _isSelected = true;
         selectionFrame.SetActive(true);
+        Shake();
         return this;
     }
 
@@ -80,6 +105,12 @@ public class GridController : MonoBehaviour
     {
         _isSelected = false;
         selectionFrame.SetActive(false);
+        StopShaking();
+    }
+
+    private void PlayShrinkEffect()
+    {
+        transform.DOScale(Vector3.zero, 0.1f).SetEase(Ease.InElastic);
     }
 
     public void GetDestroyed()
@@ -89,6 +120,8 @@ public class GridController : MonoBehaviour
             // gain resource
             // decrease move count
             // play destroy effect
+            PlayShrinkEffect();
+            yield return new WaitForSeconds(0.15f);
             // make invisible for couple seconds
             mesh.SetActive(false);
             yield return new WaitForSeconds(0.1f);

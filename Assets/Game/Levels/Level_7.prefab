@@ -96,6 +96,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridManager: {fileID: 2964491256648552460}
-  moveCount: 20
+  moveCount: 60
   levelAlreadyCreated: 0
-  itemCountList: 00000000000000000000000003000000020000000300000000000000
+  itemCountList: 0f0000000c0000000c0000000c000000030000000c0000000f000000

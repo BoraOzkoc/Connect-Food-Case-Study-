@@ -39,7 +39,7 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.instance.isLevelActive)
+        if(GameManager.instance.IsLevelActive())
         {
             if (Input.GetMouseButtonDown(0))
             {
